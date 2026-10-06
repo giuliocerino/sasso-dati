@@ -1,17 +1,23 @@
 {
  "source": "EPEVER Solar Guardian (hncloud.epsolarpv.com)",
  "station": "Sasso_PoliTo",
- "updated": "2026-10-07T00:19:33+02:00",
- "data_time": null,
+ "updated": "2026-10-07T01:18:40+02:00",
+ "data_time": "2026-10-07T01:00:00+02:00",
  "energy": {
-  "today_kwh": null,
-  "today_kwh_portal": 0.0,
+  "today_kwh": 0.0,
+  "today_kwh_portal": 0.74,
   "month_kwh": 10.26,
   "year_kwh": 75.17,
   "total_kwh": 384.18
  },
  "alarms": 0,
- "hourly_today": [],
+ "hourly_today": [
+  {
+   "time": "2026-10-07T01:00:00+02:00",
+   "total_kwh": 384.18,
+   "hour_kwh": null
+  }
+ ],
  "controllers": [
   {
    "name": "Sasso_BP1",
@@ -25,7 +31,7 @@
      "unit": "A"
     },
     "device_temp": {
-     "value": "15.65",
+     "value": "14.87",
      "unit": "℃"
     },
     "day_kwh": {
@@ -61,11 +67,11 @@
      "unit": "W"
     },
     "batt_temp": {
-     "value": "15.65",
+     "value": "14.87",
      "unit": "℃"
     }
    },
-   "time": "2026-10-07T00:17:45.911000+02:00"
+   "time": "2026-10-07T01:17:45.095000+02:00"
   },
   {
    "name": "Sasso_BP2",
@@ -79,7 +85,7 @@
      "unit": "W"
     },
     "batt_temp": {
-     "value": "15.58",
+     "value": "14.77",
      "unit": "℃"
     },
     "batt_a": {
@@ -103,7 +109,7 @@
      "unit": "kWh"
     },
     "device_temp": {
-     "value": "15.58",
+     "value": "14.77",
      "unit": "℃"
     },
     "day_kwh": {
@@ -119,7 +125,7 @@
      "unit": "V"
     }
    },
-   "time": "2026-10-07T00:17:47.612000+02:00"
+   "time": "2026-10-07T01:17:46.803000+02:00"
   },
   {
    "name": "Sasso_BP3",
@@ -141,11 +147,11 @@
      "unit": "V"
     },
     "device_temp": {
-     "value": "15.91",
+     "value": "15.10",
      "unit": "℃"
     },
     "batt_temp": {
-     "value": "15.91",
+     "value": "15.10",
      "unit": "℃"
     },
     "batt_soc": {
@@ -173,7 +179,7 @@
      "unit": "A"
     }
    },
-   "time": "2026-10-07T00:17:50.979000+02:00"
+   "time": "2026-10-07T01:17:50.205000+02:00"
   },
   {
    "name": "Sasso_BP4",
@@ -199,7 +205,7 @@
      "unit": "W"
     },
     "batt_temp": {
-     "value": "16.52",
+     "value": "15.68",
      "unit": "℃"
     },
     "pv_v": {
@@ -215,7 +221,7 @@
      "unit": "kWh"
     },
     "device_temp": {
-     "value": "16.52",
+     "value": "15.68",
      "unit": "℃"
     },
     "day_kwh": {
@@ -227,7 +233,7 @@
      "unit": "V"
     }
    },
-   "time": "2026-10-07T00:19:06.777000+02:00"
+   "time": "2026-10-07T01:18:06.207000+02:00"
   }
  ],
  "now": {
