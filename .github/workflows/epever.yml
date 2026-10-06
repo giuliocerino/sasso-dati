@@ -1,0 +1,61 @@
+name: Dati fotovoltaico EPEVER
+
+on:
+  schedule:
+    - cron: "7 * * * *"        # ogni ora al minuto 7 (UTC)
+  workflow_dispatch: {}          # avvio manuale dalla scheda Actions
+
+permissions:
+  contents: write                # serve solo per salvare i JSON nel repository
+
+concurrency:
+  group: epever
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests==2.32.3 cryptography==43.0.3
+
+      # Il token di Solar Guardian resta in cache tra un'esecuzione e l'altra:
+      # così lo script non rifà il login ogni ora (meno rischio di captcha).
+      - name: Recupera token
+        uses: actions/cache/restore@v4
+        with:
+          path: .state
+          key: epever-token-${{ github.run_id }}
+          restore-keys: epever-token-
+
+      - name: Leggi Solar Guardian
+        env:
+          EPEVER_ACCOUNT: ${{ secrets.EPEVER_ACCOUNT }}
+          EPEVER_PASSWORD: ${{ secrets.EPEVER_PASSWORD }}
+          EPEVER_DEVICE_DATA: "1"
+        run: python scripts/epever_solar_guardian.py
+
+      - name: Salva token
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .state
+          key: epever-token-${{ github.run_id }}
+
+      - name: Pubblica i JSON
+        run: |
+          git config user.name  "sasso-data-bot"
+          git config user.email "sasso-data-bot@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "nessuna novità"
+          else
+            git commit -m "dati EPEVER $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi
