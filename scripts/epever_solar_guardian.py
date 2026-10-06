@@ -106,14 +106,23 @@ def _jwt_exp(token: str) -> float:
 
 def load_token() -> dict | None:
     try:
-        return json.loads(TOKEN_FILE.read_text())
-    except Exception:
+        return json.loads(_cipher().decrypt(TOKEN_FILE.read_bytes()))
+    except Exception:          # file assente, corrotto o cifrato con un'altra password
         return None
+
+
+def _cipher():
+    """Il token in cache è cifrato con una chiave derivata dalla password (che è un secret):
+    anche se qualcuno leggesse la cache di GitHub Actions, non potrebbe usarlo."""
+    from cryptography.fernet import Fernet
+    secret = (os.environ.get("EPEVER_PASSWORD", "") + "|" + os.environ.get("EPEVER_ACCOUNT", "")).encode()
+    key = hashlib.pbkdf2_hmac("sha256", secret, b"sasso-epever-token", 200_000)
+    return Fernet(base64.urlsafe_b64encode(key))
 
 
 def save_token(token: str) -> None:
     TOKEN_FILE.parent.mkdir(parents=True, exist_ok=True)
-    TOKEN_FILE.write_text(json.dumps({"token": token, "saved": time.time()}))
+    TOKEN_FILE.write_bytes(_cipher().encrypt(json.dumps({"token": token, "saved": time.time()}).encode()))
     try:
         TOKEN_FILE.chmod(0o600)
     except OSError:
