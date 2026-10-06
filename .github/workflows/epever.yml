@@ -55,7 +55,12 @@ jobs:
           git add data/
           if git diff --cached --quiet; then
             echo "nessuna novità"
-          else
-            git commit -m "dati EPEVER $(date -u +%Y-%m-%dT%H:%MZ)"
-            git push
+            exit 0
           fi
+          git commit -m "dati EPEVER $(date -u +%Y-%m-%dT%H:%MZ)"
+          # se nel frattempo il repository è cambiato, ci si allinea e si riprova
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin main && git push && exit 0
+            sleep 5
+          done
+          exit 1
