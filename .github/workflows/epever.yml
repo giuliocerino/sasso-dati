@@ -46,6 +46,42 @@ jobs:
         continue-on-error: true
         run: python scripts/muon.py
 
+      # Webcam Tapo: un fotogramma al giorno, solo con la lettura delle 13 (o con l'avvio manuale).
+      # Le immagini stanno nel branch "webcam", sovrascritto ogni volta: non appesantiscono la storia del repository.
+      - name: Recupera le webcam precedenti
+        continue-on-error: true
+        run: |
+          mkdir -p webcam
+          git fetch -q origin webcam && git archive FETCH_HEAD | tar -x -C webcam || echo "nessuna immagine precedente"
+
+      - name: Fotogrammi webcam (una volta al giorno)
+        continue-on-error: true
+        env:
+          TAPO_ACCOUNT: ${{ secrets.TAPO_ACCOUNT }}
+          TAPO_PASSWORD: ${{ secrets.TAPO_PASSWORD }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ "$(date -u +%H)" -lt 16 ]; then
+            sudo apt-get install -y -qq ffmpeg > /dev/null
+            pip install -q ontapo pillow
+            python scripts/tapo_webcam.py && echo "WEBCAM_DONE=1" >> "$GITHUB_ENV"
+          else
+            echo "Le webcam si aggiornano solo con la lettura delle 13."
+          fi
+
+      - name: Pubblica le webcam
+        if: env.WEBCAM_DONE == '1'
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          cd webcam
+          git init -q -b webcam
+          git config user.name  "sasso-data-bot"
+          git config user.email "sasso-data-bot@users.noreply.github.com"
+          git add -A
+          git commit -qm "webcam $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -qf "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" webcam
+
       - name: Salva token
         if: always()
         uses: actions/cache/save@v4
