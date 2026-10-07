@@ -1,0 +1,23 @@
+name: Prova Tapo (solo diagnostica)
+
+on:
+  workflow_dispatch: {}          # solo avvio manuale
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install tplink-cloud-api==5.2.1
+      - name: Leggi dispositivi Tapo
+        env:
+          TAPO_ACCOUNT: ${{ secrets.TAPO_ACCOUNT }}
+          TAPO_PASSWORD: ${{ secrets.TAPO_PASSWORD }}
+        run: python scripts/tapo_probe.py
