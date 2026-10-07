@@ -102,7 +102,7 @@ def main() -> int:
             daily[day] = {"date": day, "rate_hz": r3(e / d), "hours_covered": round(d / 3600, 1)}
 
     out = {
-        "source": "Glacier Muon Telescope · api.glacier.stefa9.it",
+        "source": "Glacier Muon Telescope · API ufficiale del progetto",
         "device": DEVICES.split(",")[0],
         "updated": now.isoformat(timespec="seconds"),
         "from": iv[0][0].isoformat(), "to": iv[-1][0].isoformat(),
