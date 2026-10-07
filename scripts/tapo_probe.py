@@ -57,6 +57,17 @@ async def main():
     except Exception as e:
         print("ESITO: login non riuscito:", type(e).__name__, str(e)[:160]); return 1
 
+    print("Login cloud Kasa:", "ok" if mgr._kasa_token else "no", "· login cloud Tapo:", "ok" if mgr._tapo_token else "no")
+    if not mgr._tapo_token:
+        # il login Tapo fallito viene ignorato in silenzio dalla libreria: lo ripetiamo per vedere il motivo
+        try:
+            from tplinkcloud.client import TPLinkApi
+            r = TPLinkApi(cloud_type="tapo").login(user, pwd, mfa_callback=no_mfa)
+            print("Secondo tentativo login Tapo:", "ok" if r and r.get("token") else "nessun token")
+            if r and r.get("token"):
+                mgr._tapo_token, mgr._tapo_refresh_token = r.get("token"), r.get("refreshToken")
+        except Exception as e:
+            print("Login Tapo non riuscito:", type(e).__name__, str(e).replace(user, "<account>")[:200])
     try:
         devices = await mgr.get_devices()
     except Exception as e:
