@@ -63,7 +63,11 @@ async def main():
         try:
             from tplinkcloud.client import TPLinkApi
             r = TPLinkApi(cloud_type="tapo").login(user, pwd, mfa_callback=no_mfa)
-            print("Secondo tentativo login Tapo:", "ok" if r and r.get("token") else "nessun token")
+            print("Secondo tentativo login Tapo:", "ok" if r and r.get("token") else "nessun token",
+                  "· campi ricevuti:", sorted(r.keys()) if isinstance(r, dict) else type(r).__name__)
+            if isinstance(r, dict):
+                for k in ("errorCode", "errorMsg", "msg", "mfaType", "lockedMinutes", "remainAttemptTimes"):
+                    if k in r: print(f"  {k}: {str(r[k])[:120]}")
             if r and r.get("token"):
                 mgr._tapo_token, mgr._tapo_refresh_token = r.get("token"), r.get("refreshToken")
         except Exception as e:
