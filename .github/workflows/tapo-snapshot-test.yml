@@ -1,0 +1,32 @@
+name: Prova fotogrammi Tapo (solo diagnostica)
+
+on:
+  workflow_dispatch: {}          # solo avvio manuale
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg > /dev/null
+      - run: pip install ontapo
+      - name: Fotogrammi dalle telecamere
+        env:
+          TAPO_ACCOUNT: ${{ secrets.TAPO_ACCOUNT }}
+          TAPO_PASSWORD: ${{ secrets.TAPO_PASSWORD }}
+        run: python scripts/tapo_snapshot.py
+      # Le immagini restano scaricabili solo per 1 giorno, dalla pagina dell'esecuzione (sezione Artifacts)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fotogrammi-prova
+          path: snapshots/
+          retention-days: 1
+          if-no-files-found: ignore
