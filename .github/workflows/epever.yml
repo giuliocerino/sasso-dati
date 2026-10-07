@@ -41,6 +41,11 @@ jobs:
           EPEVER_DEVICE_DATA: "1"
         run: python scripts/epever_solar_guardian.py
 
+      # Contatore di muoni (Glacier Muon Telescope): se l'API non risponde, i dati EPEVER si pubblicano comunque
+      - name: Leggi contatore di muoni
+        continue-on-error: true
+        run: python scripts/muon.py
+
       - name: Salva token
         if: always()
         uses: actions/cache/save@v4
