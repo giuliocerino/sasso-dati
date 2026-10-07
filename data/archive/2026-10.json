@@ -160,6 +160,26 @@
   "2026-10-07T16:00:00+02:00": {
    "total_kwh": 384.82,
    "hour_kwh": 0.12
+  },
+  "2026-10-07T17:00:00+02:00": {
+   "total_kwh": 384.86,
+   "hour_kwh": 0.04
+  },
+  "2026-10-07T18:00:00+02:00": {
+   "total_kwh": 384.89,
+   "hour_kwh": 0.03
+  },
+  "2026-10-07T19:00:00+02:00": {
+   "total_kwh": 384.89,
+   "hour_kwh": 0.0
+  },
+  "2026-10-07T20:00:00+02:00": {
+   "total_kwh": 384.89,
+   "hour_kwh": 0.0
+  },
+  "2026-10-07T21:00:00+02:00": {
+   "total_kwh": 384.89,
+   "hour_kwh": 0.0
   }
  },
  "snapshots": [
@@ -300,6 +320,76 @@
      "device_temp": "12.84",
      "day_kwh": "0.17",
      "batt_v": "27.70"
+    }
+   }
+  },
+  {
+   "time": "2026-10-07T21:23+02:00",
+   "now": {
+    "pv_power_w": 0.0,
+    "load_power_w": 0.0,
+    "battery_v": 26.6,
+    "battery_soc": 81.25,
+    "battery_temp": 10.61,
+    "battery_a": 0.0,
+    "controllers_time": "2026-10-07T21:23:06.545000+02:00"
+   },
+   "controllers": {
+    "Sasso_BP1": {
+     "pv_v": "0.00",
+     "batt_a": "0.00",
+     "device_temp": "10.39",
+     "day_kwh": "0.17",
+     "batt_v": "26.58",
+     "total_kwh": "102.76",
+     "batt_soc": "81",
+     "charging_status": "0",
+     "pv_a": "0.00",
+     "load_w": "0.00",
+     "pv_w": "0.00",
+     "batt_temp": "10.38"
+    },
+    "Sasso_BP2": {
+     "load_w": "0.00",
+     "pv_w": "0.00",
+     "batt_temp": "10.27",
+     "batt_a": "0.00",
+     "batt_soc": "81",
+     "charging_status": "0",
+     "pv_a": "0.00",
+     "total_kwh": "96.42",
+     "device_temp": "10.27",
+     "day_kwh": "0.17",
+     "batt_v": "26.58",
+     "pv_v": "0.00"
+    },
+    "Sasso_BP3": {
+     "total_kwh": "128.72",
+     "day_kwh": "0.18",
+     "batt_v": "26.60",
+     "pv_v": "0.00",
+     "device_temp": "10.61",
+     "batt_temp": "10.61",
+     "batt_soc": "81",
+     "charging_status": "0",
+     "load_w": "0.00",
+     "pv_w": "0.00",
+     "pv_a": "0.00",
+     "batt_a": "0.00"
+    },
+    "Sasso_BP4": {
+     "batt_soc": "82",
+     "charging_status": "0",
+     "pv_a": "0.00",
+     "load_w": "0.00",
+     "pv_w": "0.00",
+     "batt_temp": "11.16",
+     "pv_v": "0.00",
+     "batt_a": "0.00",
+     "total_kwh": "56.99",
+     "device_temp": "11.16",
+     "day_kwh": "0.17",
+     "batt_v": "26.64"
     }
    }
   }
