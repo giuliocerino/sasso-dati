@@ -72,6 +72,40 @@ async def main():
                 mgr._tapo_token, mgr._tapo_refresh_token = r.get("token"), r.get("refreshToken")
         except Exception as e:
             print("Login Tapo non riuscito:", type(e).__name__, str(e).replace(user, "<account>")[:200])
+    # Il cloud Tapo elenca hub e sensori con un metodo diverso da getDeviceList: proviamo le varianti note
+    if mgr._tapo_token:
+        api = mgr._tapo_api
+        types = ["SMART.TAPOHUB", "SMART.TAPOSENSOR", "SMART.IPCAMERA", "SMART.TAPOPLUG", "SMART.TAPOBULB",
+                 "SMART.KASAHUB", "SMART.TAPOSWITCH", "SMART.TAPOROBOVAC"]
+        for body in ({"method": "getDeviceList"},
+                     {"method": "getDeviceListByPage", "params": {"deviceTypeList": types, "index": 0, "limit": 50}},
+                     {"method": "getDeviceListByPage", "params": {"index": 0, "limit": 50}}):
+            try:
+                r = api._request_post_v1(body, mgr._tapo_token)
+                lst = (r.result or {}).get("deviceList") if r.successful else None
+                print(f"[Tapo {body['method']}{' con tipi' if 'deviceTypeList' in body.get('params', {}) else ''}]",
+                      f"errore {r.error_code} {str(r.msg)[:80]}" if not r.successful else f"{len(lst or [])} dispositivi")
+                for i in lst or []:
+                    print(f"   - {i.get('deviceModel')} · {i.get('deviceType')} · '{name(i.get('alias'))}' · online={i.get('status')} · ruolo={i.get('role')}")
+                    if (i.get("deviceType") or "").endswith("HUB") and r.successful:
+                        from tplinkcloud.device_client import TPLinkDeviceClient
+                        c = TPLinkDeviceClient(i.get("appServerUrl"), mgr._tapo_token, term_id=api._term_id,
+                                               access_key=api.access_key, secret_key=api.secret_key,
+                                               app_name=api._app_name, cloud_type="tapo")
+                        try:
+                            res = await c.pass_through_request(i.get("deviceId"), {"method": "get_child_device_list", "params": {"start_index": 0}})
+                            if not res:
+                                print("     sensori: nessuna risposta dal passthrough")
+                            elif res.get("error_code", 0) != 0:
+                                print("     sensori: error_code", res.get("error_code"))
+                            for ch in ((res or {}).get("result") or {}).get("child_device_list", []):
+                                keep = {k: ch.get(k) for k in ("model", "status", "current_temp", "current_humidity", "temp_unit",
+                                                               "in_alarm", "water_leak_status", "battery_percentage", "at_low_battery") if k in ch}
+                                print(f"     · {ch.get('model')} '{name(ch.get('nickname'))}': {json.dumps(keep, ensure_ascii=False)}")
+                        except Exception as e:
+                            print("     sensori: ERRORE", type(e).__name__, str(e)[:160])
+            except Exception as e:
+                print(f"[Tapo {body['method']}] ERRORE", type(e).__name__, str(e)[:160])
     try:
         devices = await mgr.get_devices()
     except Exception as e:
