@@ -12,13 +12,17 @@ Legge in sola lettura le ultime 24 ore dall'API pubblica PostgREST del gruppo
 Ogni riga di muon_data è un conteggio di eventi (event_count) in un intervallo di circa un
 minuto. Il rateo è eventi / secondi trascorsi dalla riga precedente; gli intervalli anomali
 (più corti di 20 s o più lunghi di 5 min, ad esempio dopo un'interruzione) vengono scartati.
+
+Orari: il contatore scrive l'ora UTC ma l'API la etichetta +02:00 (es. "14:45+02:00" alle 14:45 UTC).
+Si legge quindi l'orario come UTC e lo si converte in ora italiana. Se un giorno l'etichetta venisse
+corretta, l'orario "corretto" finirebbe nel futuro: in quel caso si usa l'orario così com'è.
 """
 from __future__ import annotations
 
 import json
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -50,13 +54,18 @@ def fetch(since: datetime) -> list[dict]:
         offset += PAGE
 
 
-def intervals(rows: list[dict]) -> list[tuple[datetime, int, float]]:
+def as_utc(ts: str) -> datetime:
+    """Orario scritto dal contatore, letto come UTC (l'etichetta +02:00 dell'API è sbagliata)."""
+    return datetime.fromisoformat(ts).replace(tzinfo=timezone.utc).astimezone(TZ)
+
+
+def intervals(rows: list[dict], fix_utc: bool) -> list[tuple[datetime, int, float]]:
     """(fine intervallo, eventi, secondi) per ogni intervallo valido."""
     out, prev = [], None
     for row in rows:
         if not row.get("timestamp") or row.get("event_count") is None:
             continue
-        t = datetime.fromisoformat(row["timestamp"]).astimezone(TZ)
+        t = as_utc(row["timestamp"]) if fix_utc else datetime.fromisoformat(row["timestamp"]).astimezone(TZ)
         if prev is not None:
             dt = (t - prev).total_seconds()
             if MIN_DT <= dt <= MAX_DT:
@@ -72,8 +81,13 @@ def r3(x):
 def main() -> int:
     now = datetime.now(TZ)
     since = now - timedelta(hours=24)
-    rows = fetch(since - timedelta(minutes=5))          # una riga in più per il primo intervallo
-    iv = [x for x in intervals(rows) if x[0] >= since]
+    # 3 ore in più: coprono lo sfasamento dell'etichetta e una riga per il primo intervallo
+    rows = fetch(since - timedelta(hours=3))
+    last = next((r["timestamp"] for r in reversed(rows) if r.get("timestamp")), None)
+    fix_utc = bool(last) and as_utc(last) <= now + timedelta(minutes=10)
+    if not fix_utc:
+        print("orari dell'API già corretti: nessuna conversione")
+    iv = [x for x in intervals(rows, fix_utc) if since <= x[0] <= now + timedelta(minutes=10)]
     if not iv:
         print("::warning::nessun dato del contatore di muoni nelle ultime 24 ore")
         return 0
