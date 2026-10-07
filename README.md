@@ -1,12 +1,13 @@
 # S.A.S.S.O. · dati in quota
 
-Ogni ora GitHub Actions legge in **sola lettura** il cloud EPEVER Solar Guardian dell'impianto *Sasso_PoliTo*. Poi pubblica tre file JSON, che la pagina del progetto legge direttamente:
+Due volte al giorno (13:07 e 21:07, ora legale) GitHub Actions legge in **sola lettura** il cloud EPEVER Solar Guardian dell'impianto *Sasso_PoliTo*. Poi pubblica tre file JSON, che la pagina del progetto legge direttamente:
 
 | File | Contenuto |
 |---|---|
 | `data/latest.json` | Energia prodotta oggi, nel mese, nell'anno e in totale. Contiene anche la produzione ora per ora di oggi e, se disponibili, i valori dei 4 regolatori (potenza dei moduli, tensione e SOC della batteria, temperature). |
 | `data/daily.json` | Produzione giornaliera degli ultimi due mesi circa |
 | `data/monthly.json` | Produzione mensile dell'anno in corso e di quello precedente |
+| `data/archive/AAAA-MM.json` | Archivio permanente: produzione ora per ora e una fotografia dei 4 regolatori a ogni lettura. Ogni lettura recupera anche il giorno precedente. |
 
 ## Messa in funzione (una volta sola)
 
@@ -20,7 +21,7 @@ Ogni ora GitHub Actions legge in **sola lettura** il cloud EPEVER Solar Guardian
    Queste credenziali non vanno scritte in nessun file né inviate in chat.
 3. **Attiva GitHub Pages**: *Settings → Pages → Deploy from a branch → `main` / root*.
    I dati saranno raggiungibili a `https://<utente>.github.io/<repository>/data/latest.json`.
-4. **Fai la prima prova**: apri *Actions → "Dati fotovoltaico EPEVER" → Run workflow*. Se l'esecuzione è verde, nella cartella `data/` compaiono i tre JSON. Da quel momento l'aggiornamento parte da solo ogni ora.
+4. **Fai la prima prova**: apri *Actions → "Dati fotovoltaico EPEVER" → Run workflow*. Se l'esecuzione è verde, nella cartella `data/` compaiono i tre JSON. Da quel momento l'aggiornamento parte da solo due volte al giorno.
 
 ## Come funziona e cosa può andare storto
 
