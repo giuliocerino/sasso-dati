@@ -1,8 +1,8 @@
 {
  "source": "EPEVER Solar Guardian (hncloud.epsolarpv.com)",
  "station": "Sasso_PoliTo",
- "updated": "2026-10-07T06:21:44+02:00",
- "data_time": "2026-10-07T06:00:00+02:00",
+ "updated": "2026-10-07T07:21:36+02:00",
+ "data_time": "2026-10-07T07:00:00+02:00",
  "energy": {
   "today_kwh": 0.0,
   "today_kwh_portal": 0.74,
@@ -41,6 +41,11 @@
    "time": "2026-10-07T06:00:00+02:00",
    "total_kwh": 384.18,
    "hour_kwh": 0.0
+  },
+  {
+   "time": "2026-10-07T07:00:00+02:00",
+   "total_kwh": 384.18,
+   "hour_kwh": 0.0
   }
  ],
  "controllers": [
@@ -48,7 +53,7 @@
    "name": "Sasso_BP1",
    "values": {
     "pv_v": {
-     "value": "0.00",
+     "value": "22.34",
      "unit": "V"
     },
     "batt_a": {
@@ -56,7 +61,7 @@
      "unit": "A"
     },
     "device_temp": {
-     "value": "11.82",
+     "value": "11.26",
      "unit": "℃"
     },
     "day_kwh": {
@@ -92,11 +97,11 @@
      "unit": "W"
     },
     "batt_temp": {
-     "value": "11.82",
+     "value": "11.26",
      "unit": "℃"
     }
    },
-   "time": "2026-10-07T06:17:49.757000+02:00"
+   "time": "2026-10-07T07:17:49.997000+02:00"
   },
   {
    "name": "Sasso_BP2",
@@ -110,7 +115,7 @@
      "unit": "W"
     },
     "batt_temp": {
-     "value": "11.70",
+     "value": "11.15",
      "unit": "℃"
     },
     "batt_a": {
@@ -134,7 +139,7 @@
      "unit": "kWh"
     },
     "device_temp": {
-     "value": "11.70",
+     "value": "11.15",
      "unit": "℃"
     },
     "day_kwh": {
@@ -146,11 +151,11 @@
      "unit": "V"
     },
     "pv_v": {
-     "value": "0.00",
+     "value": "22.96",
      "unit": "V"
     }
    },
-   "time": "2026-10-07T06:17:51.239000+02:00"
+   "time": "2026-10-07T07:17:53.818000+02:00"
   },
   {
    "name": "Sasso_BP3",
@@ -168,15 +173,15 @@
      "unit": "V"
     },
     "pv_v": {
-     "value": "0.00",
+     "value": "21.90",
      "unit": "V"
     },
     "device_temp": {
-     "value": "12.03",
+     "value": "11.50",
      "unit": "℃"
     },
     "batt_temp": {
-     "value": "12.03",
+     "value": "11.50",
      "unit": "℃"
     },
     "batt_soc": {
@@ -204,7 +209,7 @@
      "unit": "A"
     }
    },
-   "time": "2026-10-07T06:17:54.196000+02:00"
+   "time": "2026-10-07T07:17:56.823000+02:00"
   },
   {
    "name": "Sasso_BP4",
@@ -230,11 +235,11 @@
      "unit": "W"
     },
     "batt_temp": {
-     "value": "12.48",
+     "value": "11.94",
      "unit": "℃"
     },
     "pv_v": {
-     "value": "0.00",
+     "value": "21.84",
      "unit": "V"
     },
     "batt_a": {
@@ -246,7 +251,7 @@
      "unit": "kWh"
     },
     "device_temp": {
-     "value": "12.48",
+     "value": "11.94",
      "unit": "℃"
     },
     "day_kwh": {
@@ -258,7 +263,7 @@
      "unit": "V"
     }
    },
-   "time": "2026-10-07T06:21:05.824000+02:00"
+   "time": "2026-10-07T07:21:11.568000+02:00"
   }
  ],
  "now": {
