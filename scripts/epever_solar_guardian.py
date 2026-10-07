@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-S.A.S.S.O. – lettura oraria dei dati fotovoltaici da EPEVER Solar Guardian.
+S.A.S.S.O. – lettura (due volte al giorno) dei dati fotovoltaici da EPEVER Solar Guardian.
 
 Legge SOLO in lettura dal cloud Solar Guardian (server hncloud.epsolarpv.com)
 e scrive tre file JSON per la pagina del progetto:
@@ -201,8 +201,8 @@ def r2(x):
     return None if x is None else round(float(x), 2)
 
 
-def hourly_today(api: Api, now: datetime) -> list[dict]:
-    day0 = now.replace(hour=0, minute=0, second=0, microsecond=0)
+def hourly_day(api: Api, day: datetime) -> list[dict]:
+    day0 = day.replace(hour=0, minute=0, second=0, microsecond=0)
     rows = station_stats(api, 1, day0, day0 + timedelta(days=1))
     out, prev_total = [], None
     for row in rows:
@@ -251,9 +251,45 @@ def monthly_series(api: Api, now: datetime) -> list[dict]:
             if row.get("generatingCapacitySum") is None:
                 continue
             m = datetime.fromtimestamp(row["timeStamp"], TZ)
-            out.append({"month": m.strftime("%Y-%m"), "kwh": r2(row.get("toDayGeneratingCapacity")),
-                        "total_kwh": r2(row.get("generatingCapacitySum"))})
+            out.append({"month": m.strftime("%Y-%m"), "total_kwh": r2(row.get("generatingCapacitySum"))})
+    # Produzione del mese = totale a fine mese - totale a fine mese precedente.
+    # Il campo "mese" del portale non è affidabile; se il mese prima manca (gateway
+    # offline) la produzione resta null: il totale è giusto, il dettaglio no.
+    by_month = {m["month"]: m["total_kwh"] for m in out}
+    for m in out:
+        y, mo = map(int, m["month"].split("-"))
+        prev = f"{y - (mo == 1)}-{12 if mo == 1 else mo - 1:02d}"
+        m["kwh"] = r2(max(0.0, m["total_kwh"] - by_month[prev])) if prev in by_month else None
     return out
+
+
+# ---------- archivio permanente (data/archive/AAAA-MM.json) ----------
+
+def update_archive(days: list[list[dict]], snapshot: dict | None) -> None:
+    """Unisce le ore lette (oggi e ieri) e la fotografia dei regolatori nell'archivio del mese.
+    Le ore già presenti vengono aggiornate, mai cancellate: le letture si sommano nel tempo."""
+    entries = [h for day in days for h in day]
+    if snapshot:
+        entries.append({"time": snapshot["time"], "_snap": snapshot})
+    by_month: dict[str, list[dict]] = {}
+    for e in entries:
+        by_month.setdefault(e["time"][:7], []).append(e)
+    for month, items in by_month.items():
+        path = OUT / "archive" / f"{month}.json"
+        try:
+            arch = json.loads(path.read_text())
+        except Exception:
+            arch = {"month": month, "hours": {}, "snapshots": []}
+        for e in items:
+            if "_snap" in e:
+                if not any(s["time"] == e["time"] for s in arch["snapshots"]):
+                    arch["snapshots"].append(e["_snap"])
+            else:
+                arch["hours"][e["time"]] = {"total_kwh": e["total_kwh"], "hour_kwh": e["hour_kwh"]}
+        arch["hours"] = dict(sorted(arch["hours"].items()))
+        arch["snapshots"].sort(key=lambda s: s["time"])
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(arch, ensure_ascii=False, indent=1))
 
 
 # ---------- dati dei regolatori (sperimentale) ----------
@@ -297,19 +333,26 @@ def device_values(api: Api) -> list[dict]:
 
 
 def summarize_devices(devs: list[dict]) -> dict:
-    def num(d, k):
-        try:
-            return float(d["values"][k]["value"])
-        except Exception:
-            return None
-    pv = [num(d, "pv_w") for d in devs]
-    batt_v = [num(d, "batt_v") for d in devs if num(d, "batt_v") is not None]
-    soc = [num(d, "batt_soc") for d in devs if num(d, "batt_soc") is not None]
+    def vals(k):
+        out = []
+        for d in devs:
+            try:
+                out.append(float(d["values"][k]["value"]))
+            except Exception:
+                pass
+        return out
+    mean = lambda xs: r2(sum(xs) / len(xs)) if xs else None
+    total = lambda xs: r2(sum(xs)) if xs else None
     return {
-        "pv_power_w": r2(sum(x for x in pv if x is not None)) if any(x is not None for x in pv) else None,
-        # batteria comune ai 4 regolatori: media delle letture
-        "battery_v": r2(sum(batt_v) / len(batt_v)) if batt_v else None,
-        "battery_soc": r2(sum(soc) / len(soc)) if soc else None,
+        "pv_power_w": total(vals("pv_w")),
+        "load_power_w": total(vals("load_w")),
+        # batteria comune ai 4 regolatori: tensione, SOC e temperatura come media delle letture,
+        # corrente di carica come somma dei contributi
+        "battery_v": mean(vals("batt_v")),
+        "battery_soc": mean(vals("batt_soc")),
+        "battery_temp": mean(vals("batt_temp")),
+        "battery_a": total(vals("batt_a")),
+        "controllers_time": max((d["time"] for d in devs if d.get("time")), default=None),
     }
 
 
@@ -332,7 +375,8 @@ def main() -> int:
         return 2
 
     gen = call(api, "/vn/userView/getGeneratedEnergy")["data"]
-    hours = hourly_today(api, now)
+    hours = hourly_day(api, now)
+    yesterday = hourly_day(api, now - timedelta(days=1))   # recupera l'eventuale lettura saltata
     today_kwh = None
     if hours:
         # produzione di oggi = totale ora - totale a mezzanotte
@@ -362,6 +406,13 @@ def main() -> int:
         except Exception as e:
             print("::warning::valori dei regolatori non disponibili:", e)
             latest["controllers_error"] = str(e)[:200]
+
+    snapshot = None
+    if latest.get("controllers"):
+        snapshot = {"time": now.isoformat(timespec="minutes"), "now": latest["now"],
+                    "controllers": {d["name"]: {k: v["value"] for k, v in d["values"].items()}
+                                    for d in latest["controllers"]}}
+    update_archive([yesterday, hours], snapshot)
 
     write_json("latest.json", latest)
     write_json("daily.json", {"updated": latest["updated"], "days": daily_series(api, now)})
