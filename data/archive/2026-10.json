@@ -244,6 +244,38 @@
   "2026-10-08T13:00:00+02:00": {
    "total_kwh": 385.47,
    "hour_kwh": 0.04
+  },
+  "2026-10-08T14:00:00+02:00": {
+   "total_kwh": 385.5,
+   "hour_kwh": 0.03
+  },
+  "2026-10-08T15:00:00+02:00": {
+   "total_kwh": 385.53,
+   "hour_kwh": 0.03
+  },
+  "2026-10-08T16:00:00+02:00": {
+   "total_kwh": 385.57,
+   "hour_kwh": 0.04
+  },
+  "2026-10-08T17:00:00+02:00": {
+   "total_kwh": 385.59,
+   "hour_kwh": 0.02
+  },
+  "2026-10-08T18:00:00+02:00": {
+   "total_kwh": 385.62,
+   "hour_kwh": 0.03
+  },
+  "2026-10-08T19:00:00+02:00": {
+   "total_kwh": 385.62,
+   "hour_kwh": 0.0
+  },
+  "2026-10-08T20:00:00+02:00": {
+   "total_kwh": 385.62,
+   "hour_kwh": 0.0
+  },
+  "2026-10-08T21:00:00+02:00": {
+   "total_kwh": 385.62,
+   "hour_kwh": 0.0
   }
  },
  "snapshots": [
@@ -524,6 +556,76 @@
      "device_temp": "12.14",
      "day_kwh": "0.13",
      "batt_v": "27.62"
+    }
+   }
+  },
+  {
+   "time": "2026-10-08T21:23+02:00",
+   "now": {
+    "pv_power_w": 0.0,
+    "load_power_w": 0.0,
+    "battery_v": 26.62,
+    "battery_soc": 81.5,
+    "battery_temp": 9.68,
+    "battery_a": 0.0,
+    "controllers_time": "2026-10-08T21:23:06.015000+02:00"
+   },
+   "controllers": {
+    "Sasso_BP1": {
+     "pv_v": "0.00",
+     "batt_a": "0.00",
+     "device_temp": "8.68",
+     "day_kwh": "0.23",
+     "batt_v": "26.59",
+     "total_kwh": "103.00",
+     "batt_soc": "81",
+     "charging_status": "0",
+     "pv_a": "0.00",
+     "load_w": "0.00",
+     "pv_w": "0.00",
+     "batt_temp": "8.68"
+    },
+    "Sasso_BP2": {
+     "load_w": "0.00",
+     "pv_w": "0.00",
+     "batt_temp": "9.45",
+     "batt_a": "0.00",
+     "batt_soc": "81",
+     "charging_status": "0",
+     "pv_a": "0.00",
+     "total_kwh": "96.60",
+     "device_temp": "9.45",
+     "day_kwh": "0.17",
+     "batt_v": "26.62",
+     "pv_v": "0.00"
+    },
+    "Sasso_BP3": {
+     "total_kwh": "128.90",
+     "day_kwh": "0.18",
+     "batt_v": "26.60",
+     "pv_v": "0.00",
+     "device_temp": "10.09",
+     "batt_temp": "10.09",
+     "batt_soc": "82",
+     "charging_status": "0",
+     "load_w": "0.00",
+     "pv_w": "0.00",
+     "pv_a": "0.00",
+     "batt_a": "0.00"
+    },
+    "Sasso_BP4": {
+     "batt_soc": "82",
+     "charging_status": "0",
+     "pv_a": "0.00",
+     "load_w": "0.00",
+     "pv_w": "0.00",
+     "batt_temp": "10.49",
+     "pv_v": "0.00",
+     "batt_a": "0.00",
+     "total_kwh": "57.12",
+     "device_temp": "10.49",
+     "day_kwh": "0.13",
+     "batt_v": "26.66"
     }
    }
   }
