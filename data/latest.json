@@ -1,93 +1,17 @@
 {
  "source": "EPEVER Solar Guardian (hncloud.epsolarpv.com)",
  "station": "Sasso_PoliTo",
- "updated": "2026-10-09T21:21:34+02:00",
- "data_time": "2026-10-09T15:00:00+02:00",
+ "updated": "2026-10-10T13:20:40+02:00",
+ "data_time": null,
  "energy": {
-  "today_kwh": 0.66,
-  "today_kwh_portal": 0.64,
+  "today_kwh": null,
+  "today_kwh_portal": 0.0,
   "month_kwh": 12.36,
   "year_kwh": 77.27,
   "total_kwh": 386.28
  },
  "alarms": 0,
- "hourly_today": [
-  {
-   "time": "2026-10-09T01:00:00+02:00",
-   "total_kwh": 385.62,
-   "hour_kwh": null
-  },
-  {
-   "time": "2026-10-09T02:00:00+02:00",
-   "total_kwh": 385.62,
-   "hour_kwh": 0.0
-  },
-  {
-   "time": "2026-10-09T03:00:00+02:00",
-   "total_kwh": 385.62,
-   "hour_kwh": 0.0
-  },
-  {
-   "time": "2026-10-09T04:00:00+02:00",
-   "total_kwh": 385.62,
-   "hour_kwh": 0.0
-  },
-  {
-   "time": "2026-10-09T05:00:00+02:00",
-   "total_kwh": 385.62,
-   "hour_kwh": 0.0
-  },
-  {
-   "time": "2026-10-09T06:00:00+02:00",
-   "total_kwh": 385.62,
-   "hour_kwh": 0.0
-  },
-  {
-   "time": "2026-10-09T07:00:00+02:00",
-   "total_kwh": 385.62,
-   "hour_kwh": 0.0
-  },
-  {
-   "time": "2026-10-09T08:00:00+02:00",
-   "total_kwh": 385.62,
-   "hour_kwh": 0.0
-  },
-  {
-   "time": "2026-10-09T09:00:00+02:00",
-   "total_kwh": 385.66,
-   "hour_kwh": 0.04
-  },
-  {
-   "time": "2026-10-09T10:00:00+02:00",
-   "total_kwh": 386.04,
-   "hour_kwh": 0.38
-  },
-  {
-   "time": "2026-10-09T11:00:00+02:00",
-   "total_kwh": 386.15,
-   "hour_kwh": 0.11
-  },
-  {
-   "time": "2026-10-09T12:00:00+02:00",
-   "total_kwh": 386.19,
-   "hour_kwh": 0.04
-  },
-  {
-   "time": "2026-10-09T13:00:00+02:00",
-   "total_kwh": 386.21,
-   "hour_kwh": 0.02
-  },
-  {
-   "time": "2026-10-09T14:00:00+02:00",
-   "total_kwh": 386.25,
-   "hour_kwh": 0.04
-  },
-  {
-   "time": "2026-10-09T15:00:00+02:00",
-   "total_kwh": 386.28,
-   "hour_kwh": 0.03
-  }
- ],
+ "hourly_today": [],
  "controllers": [
   {
    "name": "Sasso_BP1",
