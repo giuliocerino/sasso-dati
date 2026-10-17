@@ -1,0 +1,37 @@
+{
+ "updated": "2026-10-17T13:29:23+02:00",
+ "cameras": {
+  "interna-volume": {
+   "name": "camera3",
+   "label": "Interna, nel volume in lamiera",
+   "time": "2026-10-17T13:29+02:00",
+   "width": 1280,
+   "height": 720,
+   "ok": true
+  },
+  "interna-finestra": {
+   "name": "Tapo_C410_5777_monte",
+   "label": "Interna, dal tavolo verso la finestra",
+   "time": "2026-10-17T13:30+02:00",
+   "width": 1280,
+   "height": 720,
+   "ok": true
+  },
+  "esterna-valle": {
+   "name": "Tapo_C410_FEE7_valle",
+   "label": "Esterna lato valle",
+   "time": "2026-10-17T13:30+02:00",
+   "width": 1280,
+   "height": 720,
+   "ok": true
+  },
+  "esterna-monte": {
+   "name": "monte1",
+   "label": "Esterna lato monte",
+   "time": "2026-10-17T13:30+02:00",
+   "width": 1280,
+   "height": 720,
+   "ok": true
+  }
+ }
+}
