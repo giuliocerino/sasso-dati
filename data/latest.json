@@ -1,12 +1,12 @@
 {
  "source": "EPEVER Solar Guardian (hncloud.epsolarpv.com)",
  "station": "Sasso_PoliTo",
- "updated": "2026-10-31T20:39:11+01:00",
+ "updated": "2026-11-01T12:36:56+01:00",
  "data_time": null,
  "energy": {
   "today_kwh": null,
   "today_kwh_portal": 0.0,
-  "month_kwh": 12.36,
+  "month_kwh": 0.0,
   "year_kwh": 77.27,
   "total_kwh": 386.28
  },
