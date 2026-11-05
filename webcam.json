@@ -1,0 +1,41 @@
+{
+ "updated": "2026-11-05T12:57:31+01:00",
+ "cameras": {
+  "interna-volume": {
+   "name": "camera3",
+   "label": "Interna, nel volume in lamiera",
+   "time": "2026-11-03T12:51+01:00",
+   "width": 1280,
+   "height": 720,
+   "ok": false,
+   "error": "RelayError: relay preview HTTP 500 (relayservice-appStream)"
+  },
+  "interna-finestra": {
+   "name": "Tapo_C410_5777_monte",
+   "label": "Interna, dal tavolo verso la finestra",
+   "time": "2026-11-03T12:51+01:00",
+   "width": 1280,
+   "height": 720,
+   "ok": false,
+   "error": "RelayError: relay preview HTTP 500 (relayservice-appStream)"
+  },
+  "esterna-valle": {
+   "name": "Tapo_C410_FEE7_valle",
+   "label": "Esterna lato valle",
+   "time": "2026-11-03T12:51+01:00",
+   "width": 1280,
+   "height": 720,
+   "ok": false,
+   "error": "RelayError: relay preview HTTP 500 (relayservice-appStream)"
+  },
+  "esterna-monte": {
+   "name": "monte1",
+   "label": "Esterna lato monte",
+   "time": "2026-11-03T12:51+01:00",
+   "width": 1280,
+   "height": 720,
+   "ok": false,
+   "error": "RelayError: relay preview HTTP 500 (relayservice-appStream)"
+  }
+ }
+}
