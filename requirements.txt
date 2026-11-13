@@ -1,0 +1,6 @@
+# Dipendenze degli script di acquisizione dati (usate da .github/workflows/epever.yml).
+# Versioni fissate: Dependabot le controlla e segnala/propone gli aggiornamenti.
+requests==2.32.3
+cryptography==43.0.3
+ontapo==0.1.0
+pillow==12.3.0
