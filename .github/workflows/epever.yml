@@ -28,7 +28,7 @@ jobs:
       # Il token di Solar Guardian resta in cache tra un'esecuzione e l'altra:
       # così lo script non rifà il login ogni ora (meno rischio di captcha).
       - name: Recupera token
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: .state
           key: epever-token-${{ github.run_id }}
@@ -83,7 +83,7 @@ jobs:
 
       - name: Salva token
         if: always()
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: .state
           key: epever-token-${{ github.run_id }}
